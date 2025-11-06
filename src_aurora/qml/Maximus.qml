@@ -37,6 +37,11 @@ ApplicationWindow {
                 requestDataSync();
             }
         }
+
+        onRequestPassword: {
+            pageStack.replace(Qt.resolvedUrl("pages/EntherPasswordPage.qml"), {trackId: trackId})
+        }
+
         onTokenReady: {
             userSession.storeToken(token)
             pageStack.push(Qt.resolvedUrl("pages/EntherCodePage.qml"))
@@ -49,9 +54,11 @@ ApplicationWindow {
     UserSession{
         id: userSession
         onUserIdChanged: {
-            if(userSession.userId > 0) {
+            if (userSession.userId > 0) {
                 pageStack.clear();
                 pageStack.push(Qt.resolvedUrl("pages/ChatListPage.qml"))
+            } else {
+                console.log("+++++++++++++++++++++++++++++++++++++++++")
             }
         }
 

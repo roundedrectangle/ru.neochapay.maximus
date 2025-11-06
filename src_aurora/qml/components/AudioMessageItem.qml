@@ -20,38 +20,34 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 
-Page {
-    objectName: "entherCodePage"
-    allowedOrientations: Orientation.All
+Item{
+    height: Theme.itemSizeLarge
+    width: messagesListView.width / 2
 
-    PageHeader {
-        id: header
-        objectName: "pageHeader"
-        title: qsTr("Enther code")
-    }
+    Row {
+        id: audioMessageControlItem
+        spacing: height * 0.1
+        width: parent.width - height * 0.1
+        height: parent.height
 
-    SilicaFlickable {
-        anchors.fill: parent
-
-        TextField {
-            id: codeNumberField
-            placeholderText: qsTr("XXXXXX")
-            inputMethodHints: Qt.ImhFormattedNumbersOnly
-            anchors.centerIn: parent
+        anchors{
+            left: parent.left
+            leftMargin: height * 0.1
         }
 
-        Button{
-            id: sendCodeButton
-            text: qsTr("Send")
-            width: codeNumberField.width
-            enabled: codeNumberField.text.length == 6
+        ColorIcon{
+            id: playIcon
+            height: parent.height * 0.8
+            width: height
+            source: "../icons/audio.svg"
+        }
 
-            anchors.top: codeNumberField.bottom
-
-            onClicked: {
-                serverConnection.sendCode(codeNumberField.text)
-            }
+        Slider {
+            width: audioMessageControlItem.width
+            height: parent.height * 0.8
+            minimumValue: 0
+            maximumValue: duration
+            value: 0
         }
     }
 }
-

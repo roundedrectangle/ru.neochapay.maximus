@@ -21,35 +21,35 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 Page {
-    objectName: "entherCodePage"
+    objectName: "entherPasswordPage"
     allowedOrientations: Orientation.All
+
+    property string trackId
 
     PageHeader {
         id: header
         objectName: "pageHeader"
-        title: qsTr("Enther code")
+        title: qsTr("Enther password")
     }
 
     SilicaFlickable {
         anchors.fill: parent
 
         TextField {
-            id: codeNumberField
-            placeholderText: qsTr("XXXXXX")
-            inputMethodHints: Qt.ImhFormattedNumbersOnly
+            id: passswordField
             anchors.centerIn: parent
+            inputMethodHints: Qt.ImhHiddenText
+            echoMode: TextInput.Password
         }
 
         Button{
-            id: sendCodeButton
-            text: qsTr("Send")
-            width: codeNumberField.width
-            enabled: codeNumberField.text.length == 6
-
-            anchors.top: codeNumberField.bottom
+            id: sendPasswordButton
+            text: qsTr("Send password")
+            width: passswordField.width
+            anchors.top: passswordField.bottom
 
             onClicked: {
-                serverConnection.sendCode(codeNumberField.text)
+                serverConnection.sendPassword(passswordField.text, trackId)
             }
         }
     }

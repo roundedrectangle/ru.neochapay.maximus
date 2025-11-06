@@ -36,6 +36,7 @@ public:
 
     Q_INVOKABLE void sendPhone(QString phone);
     Q_INVOKABLE void sendCode(QString code);
+    Q_INVOKABLE void sendPassword(QString password, QString trackId);
     Q_INVOKABLE void requestDataSync();
     Q_INVOKABLE void requestContactsByIDs(QList<int> idS);
     Q_INVOKABLE void requestChatById(int chatId, int from, int backward = 30, int forward = 0);
@@ -47,6 +48,7 @@ signals:
     void userIdChanged();
     void tokenReady(QString token);
     void connectionError();
+    void requestPassword(QString trackId);
 
 private slots:
     void sendHeartBeatMessage();

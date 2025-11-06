@@ -49,7 +49,7 @@ void ServerConnection::init()
     payload["deviceId"] = m_settings->value(QString("deviceId")).toString();
 
     QJsonObject userAgent;
-    userAgent.insert("appVersion", "25.6.11");
+    userAgent.insert("appVersion", "25.11.1");
     userAgent.insert("deviceLocale", "ru");
     userAgent.insert("deviceName", "Chrome");
     userAgent.insert("deviceType", "WEB");
@@ -73,9 +73,39 @@ void ServerConnection::sendHeartBeatMessage()
 
 void ServerConnection::onMessageReceived(RawApiMessage message)
 {
-    if(message.seq() == m_messSeq && !message.payload().isEmpty()) {
-        qDebug() << "READY TO LOGIN";
+    if(message.opcode() == 6) {
+        //COUNTRY CODES AND OTHER FOR PHONENUMBERS
         emit readyToLogin();
+    }
+
+    if(message.opcode() == 17) {
+        if(!message.payload()["token"].toString().isEmpty()) {
+            emit tokenReady(message.payload()["token"].toString());
+        }
+    }
+
+    if(message.opcode() == 18) {
+        QJsonObject payload = message.payload();
+        if(payload["passwordChallenge"].isUndefined()) {
+            qDebug() << "READY TO LOGIN";
+            emit readyToLogin();
+        } else {
+            QString trackId = payload["passwordChallenge"].toObject()["trackId"].toString();
+            emit requestPassword(trackId);
+        }
+    }
+
+    if(message.opcode() == 115) {
+        if(!message.payload()["error"].isUndefined()) {
+            qWarning() << message.payload()["localizedMessage"];
+            return;
+        }
+        QString token = message.payload()["tokenAttrs"].toObject()["LOGIN"].toObject()["token"].toString();
+        if(!token.isEmpty()) {
+            emit tokenReady(token);
+        } else {
+            qWarning() << message.payload();
+        }
     }
     m_heartBeatTimer->start(30000);
 }
@@ -87,14 +117,7 @@ void ServerConnection::sendPhone(QString phone)
     payload["language"] = "ru";
     payload["phone"] = phone;
 
-    int seq = m_messQueue->sendMessage(17, payload);
-    connect(m_messQueue, &MessagesQueue::messageReceived, [=](RawApiMessage message) {
-        if(message.seq() == seq) {
-            if(!message.payload()["token"].toString().isEmpty()) {
-                emit tokenReady(message.payload()["token"].toString());
-            }
-        }
-    });
+    m_messQueue->sendMessage(17, payload);
 }
 
 void ServerConnection::sendCode(QString code)
@@ -105,6 +128,15 @@ void ServerConnection::sendCode(QString code)
     payload["verifyCode"] = code;
 
     m_messQueue->sendMessage(18, payload);
+}
+
+void ServerConnection::sendPassword(QString password, QString trackId)
+{
+    QJsonObject payload;
+    payload["password"] = password;
+    payload["trackId"] = trackId;
+
+    m_messQueue->sendMessage(115, payload);
 }
 
 void ServerConnection::requestDataSync()

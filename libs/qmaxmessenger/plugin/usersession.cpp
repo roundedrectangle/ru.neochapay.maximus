@@ -32,12 +32,16 @@ UserSession::UserSession(QObject *parent)
 {
     connect(m_messQueue, &MessagesQueue::messageReceived, [=](RawApiMessage message) {
         //FROM LOGIN DATA
-        if(message.opcode() == 18) {
+        if(message.opcode() == 18 || message.opcode() == 115) {
             updateSessionData(message.payload());
         }
         //FROM UPDATE ON START DATA
         if(message.opcode() == 19) {
             updateOnStartData(message.payload());
+        }
+        //FROM START
+        if(message.opcode() == 6) {
+            coldStart();
         }
     });
 }
@@ -115,7 +119,7 @@ void UserSession::updateSessionData(QJsonObject payload)
 {
     QString authToken = payload["tokenAttrs"].toObject()["LOGIN"].toObject()["token"].toString();
     if(authToken.isEmpty()) {
-        qDebug() << "Auth token is empty!";
+        qWarning() << "Auth token is empty!";
         return;
     }
     m_settings->setValue("authToken", authToken);
@@ -127,17 +131,21 @@ void UserSession::updateSessionData(QJsonObject payload)
 
 void UserSession::updateOnStartData(QJsonObject payload)
 {
-    QJsonObject profile = payload["profile"].toObject();
+    QJsonObject profile = payload["profile"].toObject()["contact"].toObject();
     updateProfile(profile);
 }
 
 void UserSession::updateProfile(QJsonObject profile)
 {
     Contact* userProfile = new Contact(profile);
+    if(userProfile->userId() == 0) {
+        qWarning() << "UserProfile ID is 0";
+        return;
+    }
     if(userProfile->userId() != m_userProfile->userId()) {
         m_userProfile = userProfile;
         emit userIdChanged();
-    }
+   }
 }
 
 QString UserSession::authToken()

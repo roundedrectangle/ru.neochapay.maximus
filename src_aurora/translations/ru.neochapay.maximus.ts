@@ -137,8 +137,21 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/EntherCodePage.qml" line="44"/>
+        <location filename="../qml/pages/EntherCodePage.qml" line="45"/>
         <source>Send</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>EntherPasswordPage</name>
+    <message>
+        <location filename="../qml/pages/EntherPasswordPage.qml" line="32"/>
+        <source>Enther password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/EntherPasswordPage.qml" line="47"/>
+        <source>Send password</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

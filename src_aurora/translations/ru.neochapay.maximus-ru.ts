@@ -119,6 +119,17 @@
     </message>
 </context>
 <context>
+    <name>EntherPasswordPage</name>
+    <message>
+        <source>Enther password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Send password</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>EntherPhonePage</name>
     <message>
         <source>Enther phone</source>
