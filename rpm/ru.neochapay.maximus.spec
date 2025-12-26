@@ -10,7 +10,7 @@ URL:        https://neochapay.ru
 Source0:    %{name}-%{version}.tar.bz2
 
 Requires:   sailfishsilica-qt5 >= 0.10.9
-BuildRequires:  pkgconfig(auroraapp)
+BuildRequires:  pkgconfig(sailfishapp) >= 1.0.3
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Qml)
 BuildRequires:  pkgconfig(Qt5Quick)
@@ -26,12 +26,13 @@ OpenSource клиент мессенджера максдля ОС Аврора
 %make_build
 
 %install
-%make_install
+%qmake5_install
 for size in 86 108 128 172
 do
    mkdir -p %{buildroot}%{_datadir}/icons/hicolor/${size}x${size}/apps/
    cp -r %{_sourcedir}/../src_aurora/icons/${size}x${size}/* %{buildroot}%{_datadir}/icons/hicolor/${size}x${size}/apps/
 done
+
 
 %files
 %defattr(-,root,root,-)

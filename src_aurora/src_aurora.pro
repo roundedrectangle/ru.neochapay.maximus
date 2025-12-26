@@ -1,7 +1,7 @@
 TARGET = ru.neochapay.maximus
 
 CONFIG += \
-    auroraapp
+    sailfishapp
 
 INCLUDEPATH += ../libs/qtwebsockets5 \
                ../libs/qmaxmessenger \
@@ -29,9 +29,9 @@ DISTFILES += \
     qml/components/* \
     translations/*.ts
 
-AURORAAPP_ICONS = 86x86 108x108 128x128 172x172 256x256
+SAILFISHAPP_ICONS = 86x86 108x108 128x128 172x172 256x256
 
-CONFIG += auroraapp_i18n
+CONFIG += sailfishapp_i18n
 
 TRANSLATIONS += \
     translations/ru.neochapay.maximus.ts \

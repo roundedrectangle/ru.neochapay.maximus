@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <auroraapp.h>
+#include <sailfishapp.h>
 #include <QtQuick>
 
 #include "plugin/serverconnection.h"
@@ -32,7 +32,7 @@
 
 int main(int argc, char *argv[])
 {
-    QScopedPointer<QGuiApplication> application(Aurora::Application::application(argc, argv));
+    QScopedPointer<QGuiApplication> application(SailfishApp::application(argc, argv));
     application->setOrganizationName(QStringLiteral("ru.neochapay"));
     application->setApplicationName(QStringLiteral("maximus"));
 
@@ -45,11 +45,11 @@ int main(int argc, char *argv[])
     qmlRegisterType<Chat>("ru.neochapay.maximus", 1, 0, "Chat");
     qmlRegisterType<EmojiModel>("EmojiModel", 1, 0, "EmojiModel");
 
-    QScopedPointer<QQuickView> view(Aurora::Application::createView());
+    QScopedPointer<QQuickView> view(SailfishApp::createView());
     view->engine()->addImageProvider("qwebp", new WebpImageProvider);
 
     view->rootContext()->setContextProperty("version", APP_VERSION);
-    view->setSource(Aurora::Application::pathTo(QStringLiteral("qml/Maximus.qml")));
+    view->setSource(SailfishApp::pathTo(QStringLiteral("qml/Maximus.qml")));
     view->show();
 
     return application->exec();
